@@ -13,6 +13,11 @@ func root_handler(w http.ResponseWriter, r *http.Request) {
 
 func JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"version": 1, "hi": "bye"}` + "\n"))
+	w.Write([]byte(`{"version": 1, "hi": "hello"}` + "\n"))
+}
+
+func JsonHandler2(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"version": 1, "hi": "greetings"}` + "\n"))
 }
 

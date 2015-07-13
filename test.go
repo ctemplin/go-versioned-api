@@ -12,17 +12,36 @@ func Server() *negroni.Negroni {
 	router := mux.NewRouter()
 	router.Path("/")
 
-	versions := []struct {
+	type url struct {
+		path string
 		handler func(http.ResponseWriter, *http.Request)
+	}
+
+	type version struct {
 		acceptHeader string
-	}{
-		{handlersv1.JsonHandler, "application/vnd+json"},
-		{handlersv2.JsonHandler, "application/vnd.ctemplin.v2+json"},
+		urls []url
+	}
+
+	versions := []version {
+		{"application/vnd+json",
+			[]url{
+				{"/json.json", handlersv1.JsonHandler},
+				{"/json2.json", handlersv1.JsonHandler2},
+			},
+		},
+		{"application/vnd.ctemplin.v2+json",
+			[]url{
+				{"/json.json", handlersv2.JsonHandler},
+				{"/json2.json", handlersv2.JsonHandler2},
+			},
+		},
 	}
 
 	for _, version := range versions {
 		subrouter := router.Headers("Accept", version.acceptHeader).Subrouter()
-		subrouter.HandleFunc("/json.json", version.handler)
+		for _, url := range version.urls {
+			subrouter.HandleFunc(url.path, url.handler)
+		}
 	}
 	
 	n := negroni.New()
