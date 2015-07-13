@@ -2,7 +2,6 @@ package main
 
 import (
     "github.com/gorilla/mux"
-	// "net/http"
     "github.com/codegangsta/negroni"
     "dev/handlers/v1"
     "dev/handlers/v2"
