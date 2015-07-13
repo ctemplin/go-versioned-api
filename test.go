@@ -5,16 +5,24 @@ import (
     "github.com/codegangsta/negroni"
     "dev/handlers/v1"
     "dev/handlers/v2"
+    "net/http"
 )
 
 func Server() *negroni.Negroni {
 	router := mux.NewRouter()
 	router.Path("/")
-	v1r := router.Headers("Accept", "application/vnd+json").Subrouter()
-	v1r.HandleFunc("/json.json", handlersv1.JsonHandler)
 
-	v2r := router.Headers("Accept", "application/vnd.ctemplin.v2+json").Subrouter()
-	v2r.HandleFunc("/json.json", handlersv2.JsonHandler)
+	versions := []struct {
+		handler func(http.ResponseWriter, *http.Request)
+		acceptHeader string
+	}{
+		{handlersv1.JsonHandler, "application/vnd+json"},
+		{handlersv2.JsonHandler, "application/vnd.ctemplin.v2+json"},
+	}
+
+	for _, version := range versions {
+		router.Headers("Accept", version.acceptHeader).Subrouter().HandleFunc("/json.json", version.handler)
+	}
 	
 	n := negroni.New()
 	n.UseHandler(router)
