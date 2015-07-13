@@ -25,14 +25,14 @@ func Server() *negroni.Negroni {
 	versions := []version {
 		{"application/vnd+json",
 			[]url{
-				{"/json.json", handlersv1.JsonHandler},
-				{"/json2.json", handlersv1.JsonHandler2},
+				{"/json.json", new(handlersv1.APIv1).JsonHandler},
+				{"/json2.json", new(handlersv1.APIv1).JsonHandler2},
 			},
 		},
 		{"application/vnd.ctemplin.v2+json",
 			[]url{
-				{"/json.json", handlersv2.JsonHandler},
-				{"/json2.json", handlersv2.JsonHandler2},
+				{"/json.json", new(handlersv2.APIv2).JsonHandler},
+				{"/json2.json", new(handlersv2.APIv2).JsonHandler2},
 			},
 		},
 	}
