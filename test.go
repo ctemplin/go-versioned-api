@@ -21,7 +21,8 @@ func Server() *negroni.Negroni {
 	}
 
 	for _, version := range versions {
-		router.Headers("Accept", version.acceptHeader).Subrouter().HandleFunc("/json.json", version.handler)
+		subrouter := router.Headers("Accept", version.acceptHeader).Subrouter()
+		subrouter.HandleFunc("/json.json", version.handler)
 	}
 	
 	n := negroni.New()
