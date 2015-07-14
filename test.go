@@ -6,44 +6,49 @@ import (
     "dev/handlers/v1"
     "dev/handlers/v2"
     "net/http"
+    "dev/handlers"
 )
 
 func Server() *negroni.Negroni {
 	router := mux.NewRouter()
 	router.Path("/")
 
-	type url struct {
+	type version struct {
+		acceptHeader string
+		apiVersion api.API
+	}
+
+	type urlRoute struct {
 		path string
 		handler func(http.ResponseWriter, *http.Request)
 	}
-
-	type version struct {
-		acceptHeader string
-		urls []url
-	}
-
+	
 	versions := []version {
-		{"application/vnd+json",
-			[]url{
-				{"/json.json", new(handlersv1.APIv1).JsonHandler},
-				{"/json2.json", new(handlersv1.APIv1).JsonHandler2},
-			},
+		{
+			"application/vnd+json",
+			new(handlersv1.APIv1),
 		},
-		{"application/vnd.ctemplin.v2+json",
-			[]url{
-				{"/json.json", new(handlersv2.APIv2).JsonHandler},
-				{"/json2.json", new(handlersv2.APIv2).JsonHandler2},
-			},
+		{
+			"application/vnd.ctemplin.v2+json",
+			new(handlersv2.APIv2),
 		},
 	}
 
 	for _, version := range versions {
 		subrouter := router.Headers("Accept", version.acceptHeader).Subrouter()
-		for _, url := range version.urls {
-			subrouter.HandleFunc(url.path, url.handler)
+		paths := []string{"/json.json", "/json2.json"}
+
+		pathHandlers := []urlRoute{
+			{paths[0], version.apiVersion.JsonHandler},
+			{paths[1], version.apiVersion.JsonHandler2},
+		}
+		for i := 0; i < len(paths); i++ {
+			subrouter.HandleFunc(
+				pathHandlers[i].path,
+				pathHandlers[i].handler)
 		}
 	}
-	
+
 	n := negroni.New()
 	n.UseHandler(router)
 	return n
