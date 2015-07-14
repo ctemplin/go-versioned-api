@@ -1,9 +1,7 @@
 package handlersv2
 
 import (
-    "fmt"
     "net/http"
-    "github.com/gorilla/mux"
     "dev/handlers/v1"
 )
 
@@ -13,11 +11,6 @@ type APIv2 struct {
 
 func (api *APIv2) Version() string {
 	return "v2.0"
-}
-
-func (api *APIv2) root_handler(w http.ResponseWriter, r *http.Request) {
-	
-    fmt.Fprintf(w, "Hi there, I really do love %s!", mux.Vars(r)["path"])
 }
 
 func (api *APIv2) JsonHandler(w http.ResponseWriter, r *http.Request) {
