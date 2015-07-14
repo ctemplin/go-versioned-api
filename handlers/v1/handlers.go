@@ -13,12 +13,12 @@ func (api *APIv1) Version() string {
 
 func (api *APIv1) JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"hi": "hello"}` + "\n"))
+	w.Write([]byte(`{"greeting": "hello"}` + "\n"))
 }
 
 func (api *APIv1) JsonHandler2(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"hi": "greetings"}` + "\n"))
+	w.Write([]byte(`{"greeting": "hi"}` + "\n"))
 }
 
 func (api *APIv1) JsonHandler3(w http.ResponseWriter, r *http.Request) {

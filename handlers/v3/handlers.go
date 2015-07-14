@@ -15,10 +15,10 @@ func (api *APIv3) Version() string {
 
 func (api *APIv3) JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"hi": "hello"}` + "\n"))
+	w.Write([]byte(`{"greeting": "hello"}` + "\n"))
 }
 
 func (api *APIv3) JsonHandler3(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"hi": "salutations"}` + "\n"))
+	w.Write([]byte(`{"greeting": "salutations"}` + "\n"))
 }

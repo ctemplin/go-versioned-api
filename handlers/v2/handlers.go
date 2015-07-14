@@ -15,6 +15,6 @@ func (api *APIv2) Version() string {
 
 func (api *APIv2) JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"hi": "hello"}` + "\n"))
+	w.Write([]byte(`{"greeting": "hello"}` + "\n"))
 }
 
