@@ -9,21 +9,20 @@ import (
 	"net/url"
 )
 
+// Define API versions and their corresponding Accept headers.
+var versions = map[string]string {
+	"v1.0": "application/vnd+json",
+	"v2.0": "application/vnd.ctemplin.v2+json",
+	"v3.0": "application/vnd.ctemplin.v3+json",
+}
+
+var testUrls = []string{"/json.json", "/json2.json", "/json3.json"}
 
 // TestAPIVersionByAcceptHeader checks that values in the request's
 // accept header are mapping to the proper version of the API.
 func TestAPIVersionByAcceptHeader(t *testing.T) {
 
 	n := Server()
-
-	// Define API versions and their corresponding Accept headers.
-	versions := map[string]string {
-		"v1.0": "application/vnd+json",
-		"v2.0": "application/vnd.ctemplin.v2+json",
-		"v3.0": "application/vnd.ctemplin.v3+json",
-	}
-
-	testUrls := []string{"/json.json", "/json2.json", "/json3.json"}
 
 	// For each version make a request and check the version in
 	// the response
