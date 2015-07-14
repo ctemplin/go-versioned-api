@@ -16,7 +16,7 @@ var versions = map[string]string {
 	"v3.0": "application/vnd.example.v3+json",
 }
 
-var testUrls = []string{"/json.json", "/json2.json", "/json3.json"}
+var testPaths = []string{"/json.json", "/json2.json", "/json3.json"}
 
 // TestAPIVersionByAcceptHeader checks that values in the request's
 // accept header are mapping to the proper version of the API.
@@ -32,11 +32,11 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 			"Accept": {acceptHeader},
 		} 
 
-		for _, testUrl := range testUrls {
+		for _, testPath := range testPaths {
 
 			response := httptest.NewRecorder()
 
-			url1 := url.URL{Host: "localhost", Path: testUrl}
+			url1 := url.URL{Host: "localhost", Path: testPath}
 
 			request := http.Request{
 				URL: &url1,
