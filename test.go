@@ -13,11 +13,6 @@ func Server() *negroni.Negroni {
 	router := mux.NewRouter()
 	router.Path("/")
 
-	acceptVersionMap := map[string]api.API {
-		"application/vnd+json": new(handlersv1.APIv1),
-		"application/vnd.ctemplin.v2+json": new(handlersv2.APIv2),
-	}
-
 	for acceptHeader, vApi := range acceptVersionMap {
 		// Create a subrouter for the header/api version.
 		subrouter := router.Headers("Accept", acceptHeader).Subrouter()
@@ -34,19 +29,26 @@ func Server() *negroni.Negroni {
 	}
 
 	n := negroni.New()
-	n.UseHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		accept := r.Header["Accept"]
-		api, exists := acceptVersionMap[accept[0]]
-		var version string
-		if exists {
-			version = api.Version()
-		} else {
-			version = "unknown"
-		}
-		w.Header().Set("X-ctemplin-version", version)
-	})
+	n.UseHandlerFunc(ApiVersionMiddleware)
 	n.UseHandler(router)
 	return n
+}
+
+var acceptVersionMap = map[string]api.API {
+	"application/vnd+json": new(handlersv1.APIv1),
+	"application/vnd.ctemplin.v2+json": new(handlersv2.APIv2),
+}
+
+func ApiVersionMiddleware(w http.ResponseWriter, r *http.Request) {
+	accept := r.Header["Accept"]
+	api, exists := acceptVersionMap[accept[0]]
+	var version string
+	if exists {
+		version = api.Version()
+	} else {
+		version = "unknown"
+	}
+	w.Header().Set("X-ctemplin-version", version)
 }
 
 func main() {
