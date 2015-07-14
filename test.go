@@ -7,11 +7,13 @@ import (
     "dev/handlers"
     "dev/handlers/v1"
     "dev/handlers/v2"
+    "dev/handlers/v3"
 )
 
 var acceptVersionMap = map[string]api.API {
 	"application/vnd+json": new(handlersv1.APIv1),
 	"application/vnd.ctemplin.v2+json": new(handlersv2.APIv2),
+	"application/vnd.ctemplin.v3+json": new(handlersv3.APIv3),
 }
 
 func ApiVersionMiddleware(w http.ResponseWriter, r *http.Request) {
@@ -38,6 +40,7 @@ func Server() *negroni.Negroni {
 		pathHandlerMap := map[string]func(http.ResponseWriter, *http.Request) {
 			"/json.json": vApi.JsonHandler,
 			"/json2.json": vApi.JsonHandler2,
+			"/json3.json": vApi.JsonHandler3,
 		}
 		// Create a route in the subrouter for each path/handler.
 		for path, handler := range pathHandlerMap {

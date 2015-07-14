@@ -28,3 +28,9 @@ func (api *APIv1) JsonHandler2(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"hi": "greetings"}` + "\n"))
 }
 
+func (api *APIv1) JsonHandler3(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(406)
+	w.Write([]byte(`{"error": "This version of the API does not implement this endpoint."}` + "\n"))
+}
+

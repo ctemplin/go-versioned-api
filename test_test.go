@@ -20,9 +20,10 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 	versions := map[string]string {
 		"v1.0": "application/vnd+json",
 		"v2.0": "application/vnd.ctemplin.v2+json",
+		"v3.0": "application/vnd.ctemplin.v3+json",
 	}
 
-	testUrls := []string{"/json.json", "/json2.json"}
+	testUrls := []string{"/json.json", "/json2.json", "/json3.json"}
 
 	// For each version make a request and check the version in
 	// the response
@@ -53,10 +54,6 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			if len(respObj.Hi) == 0 {
-				t.Errorf("Missing 'Hi' value.")
-			}
-
 
 			responseVersion, exists := response.Header()["X-Ctemplin-Version"]
 			if !exists {
