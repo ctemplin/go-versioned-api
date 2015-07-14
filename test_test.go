@@ -64,3 +64,29 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 		}
 	}
 }
+
+// TestNotAcceptable checks that the 406 response is returned when proper.
+func TestNotAcceptable(t *testing.T) {
+
+	n := Server()
+
+	response := httptest.NewRecorder()
+
+	headers := map[string][]string{
+		"Accept": {versions["v1.0"]},
+	}  
+
+	url1 := url.URL{Host: "localhost", Path: "/json3.json"}
+
+	request := http.Request{
+		URL: &url1,
+		Header: headers,
+	}
+
+	n.ServeHTTP(response, &request)
+	// fmt.Print(response.Body)
+	if response.Code != 406 {
+		t.Errorf("Wrong response code returned using Accept-Header: %s. Expected: %d, Got: %d", versions["v1.0"], 406, response.Code)
+
+	}
+}
