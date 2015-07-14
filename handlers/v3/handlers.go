@@ -2,11 +2,11 @@ package handlersv3
 
 import (
     "net/http"
-    "dev/handlers/v1"
+    "dev/handlers/v2"
 )
 
 type APIv3 struct {
-	handlersv1.APIv1
+	handlersv2.APIv2
 }
 
 func (api *APIv3) Version() string {
