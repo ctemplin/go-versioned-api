@@ -54,7 +54,7 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 				t.Error(err)
 			}
 
-			responseVersion, exists := response.Header()["X-Ctemplin-Version"]
+			responseVersion, exists := response.Header()["X-Example-Version"]
 			if !exists {
 				t.Error("API version missing from response headers.")
 			}
