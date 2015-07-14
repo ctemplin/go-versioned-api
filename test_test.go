@@ -12,8 +12,8 @@ import (
 // Define API versions and their corresponding Accept headers.
 var versions = map[string]string {
 	"v1.0": "application/vnd+json",
-	"v2.0": "application/vnd.ctemplin.v2+json",
-	"v3.0": "application/vnd.ctemplin.v3+json",
+	"v2.0": "application/vnd.example.v2+json",
+	"v3.0": "application/vnd.example.v3+json",
 }
 
 var testUrls = []string{"/json.json", "/json2.json", "/json3.json"}

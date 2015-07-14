@@ -12,8 +12,8 @@ import (
 
 var acceptVersionMap = map[string]api.API {
 	"application/vnd+json": new(handlersv1.APIv1),
-	"application/vnd.ctemplin.v2+json": new(handlersv2.APIv2),
-	"application/vnd.ctemplin.v3+json": new(handlersv3.APIv3),
+	"application/vnd.example.v2+json": new(handlersv2.APIv2),
+	"application/vnd.example.v3+json": new(handlersv3.APIv3),
 }
 
 func ApiVersionMiddleware(w http.ResponseWriter, r *http.Request) {
@@ -25,7 +25,7 @@ func ApiVersionMiddleware(w http.ResponseWriter, r *http.Request) {
 	} else {
 		version = "unknown"
 	}
-	w.Header().Set("X-ctemplin-version", version)
+	w.Header().Set("X-example-version", version)
 }
 
 func Server() *negroni.Negroni {
