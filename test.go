@@ -1,13 +1,13 @@
 package main
 
 import (
-    "net/http"
-    "github.com/gorilla/mux"
-    "github.com/codegangsta/negroni"
-    "dev/handlers"
-    "dev/handlers/v1"
-    "dev/handlers/v2"
-    "dev/handlers/v3"
+	"net/http"
+	"github.com/gorilla/mux"
+	"github.com/codegangsta/negroni"
+	"dev/handlers"
+	"dev/handlers/v1"
+	"dev/handlers/v2"
+	"dev/handlers/v3"
 )
 
 var acceptVersionMap = map[string]api.API {

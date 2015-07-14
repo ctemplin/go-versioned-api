@@ -1,8 +1,8 @@
 package handlersv2
 
 import (
-    "net/http"
-    "dev/handlers/v1"
+	"net/http"
+	"dev/handlers/v1"
 )
 
 type APIv2 struct {

@@ -1,8 +1,8 @@
 package handlersv3
 
 import (
-    "net/http"
-    "dev/handlers/v2"
+	"net/http"
+	"dev/handlers/v2"
 )
 
 type APIv3 struct {

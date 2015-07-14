@@ -1,7 +1,7 @@
 package handlersv1
 
 import (
-    "net/http"
+	"net/http"
 )
 
 type APIv1 struct {
