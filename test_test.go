@@ -17,22 +17,19 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 	n := Server()
 
 	// Define API versions and their corresponding Accept headers.
-	versions := []struct {
-		vnum int
-		acceptHeader string
-	}{
-		{1, "application/vnd+json"},
-		{2, "application/vnd.ctemplin.v2+json"},
+	versions := map[string]string {
+		"v1.0": "application/vnd+json",
+		"v2.0": "application/vnd.ctemplin.v2+json",
 	}
 
 	testUrls := []string{"/json.json", "/json2.json"}
 
 	// For each version make a request and check the version in
 	// the response
-	for _, version := range versions {
+	for versionString, acceptHeader := range versions {
 
 		headers := map[string][]string{
-			"Accept": {version.acceptHeader},
+			"Accept": {acceptHeader},
 		} 
 
 		for _, testUrl := range testUrls {
@@ -47,7 +44,6 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 			}
 
 			respObj := struct {
-				Version int
 				Hi string
 			}{}
 
@@ -57,8 +53,17 @@ func TestAPIVersionByAcceptHeader(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
-			if respObj.Version != version.vnum {
-				t.Errorf("Wrong API version returned using Accept-Header: %s. Expected: %d, Got: %d", version.acceptHeader, version.vnum, respObj.Version)
+			if len(respObj.Hi) == 0 {
+				t.Errorf("Missing 'Hi' value.")
+			}
+
+
+			responseVersion, exists := response.Header()["X-Ctemplin-Version"]
+			if !exists {
+				t.Error("API version missing from response headers.")
+			}
+			if versionString != responseVersion[0]  {
+				t.Errorf("Wrong API version returned using Accept-Header: %s. Expected: %d, Got: %d", acceptHeader, versionString, responseVersion[0])
 			}
 		}
 	}

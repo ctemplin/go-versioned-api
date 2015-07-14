@@ -11,6 +11,10 @@ type APIv2 struct {
 	handlersv1.APIv1
 }
 
+func (api *APIv2) Version() string {
+	return "v2.0"
+}
+
 func (api *APIv2) root_handler(w http.ResponseWriter, r *http.Request) {
 	
     fmt.Fprintf(w, "Hi there, I really do love %s!", mux.Vars(r)["path"])
@@ -18,7 +22,7 @@ func (api *APIv2) root_handler(w http.ResponseWriter, r *http.Request) {
 
 func (api *APIv2) JsonHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"version": 2, "hi": "hello"}` + "\n"))
+	w.Write([]byte(`{"hi": "hello"}` + "\n"))
 }
 
 // Commented out as redundant. When not defined the "parent" handler

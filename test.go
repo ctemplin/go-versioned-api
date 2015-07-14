@@ -34,6 +34,17 @@ func Server() *negroni.Negroni {
 	}
 
 	n := negroni.New()
+	n.UseHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		accept := r.Header["Accept"]
+		api, exists := acceptVersionMap[accept[0]]
+		var version string
+		if exists {
+			version = api.Version()
+		} else {
+			version = "unknown"
+		}
+		w.Header().Set("X-ctemplin-version", version)
+	})
 	n.UseHandler(router)
 	return n
 }
