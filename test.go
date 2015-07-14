@@ -1,12 +1,12 @@
 package main
 
 import (
+    "net/http"
     "github.com/gorilla/mux"
     "github.com/codegangsta/negroni"
+    "dev/handlers"
     "dev/handlers/v1"
     "dev/handlers/v2"
-    "net/http"
-    "dev/handlers"
 )
 
 func Server() *negroni.Negroni {
