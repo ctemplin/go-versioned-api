@@ -18,12 +18,12 @@ func Server() *negroni.Negroni {
 		"application/vnd.ctemplin.v2+json": new(handlersv2.APIv2),
 	}
 
-	for acceptHeader, apiVersion := range acceptVersionMap {
+	for acceptHeader, vApi := range acceptVersionMap {
 		subrouter := router.Headers("Accept", acceptHeader).Subrouter()
 
 		pathHandlerMap := map[string]func(http.ResponseWriter, *http.Request) {
-			"/json.json": apiVersion.JsonHandler,
-			"/json2.json": apiVersion.JsonHandler2,
+			"/json.json": vApi.JsonHandler,
+			"/json2.json": vApi.JsonHandler2,
 		}
 		for path, handler := range pathHandlerMap {
 			subrouter.HandleFunc(path, handler)
