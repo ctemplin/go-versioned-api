@@ -28,6 +28,10 @@ func ApiVersionMiddleware(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("X-example-version", version)
 }
 
+func ContentTypeMiddleware(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+}
+
 func Server() *negroni.Negroni {
 	router := mux.NewRouter()
 	router.Path("/")
@@ -49,6 +53,7 @@ func Server() *negroni.Negroni {
 	}
 
 	n := negroni.New()
+	n.UseHandlerFunc(ContentTypeMiddleware)
 	n.UseHandlerFunc(ApiVersionMiddleware)
 	n.UseHandler(router)
 	return n
