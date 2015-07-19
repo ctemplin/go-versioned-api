@@ -17,6 +17,30 @@ var acceptVersionMap = map[string]api.API {
 	"application/vnd.example.v3+json": new(handlersv3.APIv3),
 }
 
+func CreateRouter() *mux.Router {
+	router := mux.NewRouter()
+	router.Path("/")
+
+	for acceptHeader, vApi := range acceptVersionMap {
+		// Create a subrouter for the header/api version.
+		subrouter := router.MatcherFunc(
+			acceptOrQueryMatcherFactory(acceptHeader)).Subrouter()
+
+		// Define the path/handler relationships.
+		pathHandlerMap := map[string]func(http.ResponseWriter, *http.Request) {
+			"/json.json": vApi.JsonHandler,
+			"/json2.json": vApi.JsonHandler2,
+			"/json3.json": vApi.JsonHandler3,
+		}
+		// Create a route in the subrouter for each path/handler.
+		for path, handler := range pathHandlerMap {
+			subrouter.HandleFunc(path, handler)
+		}
+	}
+	return router
+}
+
+
 var queryVersionMap = map[string]api.API {
 	"1": new(handlersv1.APIv1),
 	"2": new(handlersv2.APIv2),
@@ -48,31 +72,10 @@ func acceptOrQueryMatcherFactory(acceptHeader string) (func(*http.Request, *mux.
 }
 
 func Server() *negroni.Negroni {
-	router := mux.NewRouter()
-	router.Path("/")
-
-
-	for acceptHeader, vApi := range acceptVersionMap {
-		// Create a subrouter for the header/api version.
-		subrouter := router.MatcherFunc(
-			acceptOrQueryMatcherFactory(acceptHeader)).Subrouter()
-
-		// Define the path/handler relationships.
-		pathHandlerMap := map[string]func(http.ResponseWriter, *http.Request) {
-			"/json.json": vApi.JsonHandler,
-			"/json2.json": vApi.JsonHandler2,
-			"/json3.json": vApi.JsonHandler3,
-		}
-		// Create a route in the subrouter for each path/handler.
-		for path, handler := range pathHandlerMap {
-			subrouter.HandleFunc(path, handler)
-		}
-	}
-
 	n := negroni.New()
 	n.UseHandlerFunc(ContentTypeMiddleware)
 	n.UseHandlerFunc(ApiVersionMiddleware)
-	n.UseHandler(router)
+	n.UseHandler(CreateRouter())
 	return n
 }
 
