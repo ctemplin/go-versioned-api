@@ -20,7 +20,7 @@ func (api *APIv1) JsonHandler2(w http.ResponseWriter, r *http.Request) {
 }
 
 func (api *APIv1) JsonHandler3(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(406)
+	w.WriteHeader(http.StatusNotAcceptable)
 	w.Write([]byte(`{"error": "This version of the API does not implement this endpoint."}` + "\n"))
 }
 

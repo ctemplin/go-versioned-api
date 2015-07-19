@@ -133,8 +133,8 @@ func TestNotAcceptable(t *testing.T) {
 
 	n.ServeHTTP(response, &request)
 	// fmt.Print(response.Body)
-	if response.Code != 406 {
-		t.Errorf("Wrong response code returned using Accept-Header: %s. Expected: %d, Got: %d", versions["v1.0"], 406, response.Code)
+	if response.Code != http.StatusNotAcceptable {
+		t.Errorf("Wrong response code returned using Accept-Header: %s. Expected: %d, Got: %d", versions["v1.0"], http.StatusNotAcceptable, response.Code)
 
 	}
 }
