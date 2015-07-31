@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/codegangsta/negroni"
+	"github.com/mistifyio/negroni-pprof"
 	"dev/handlers"
 	"dev/handlers/v1"
 	"dev/handlers/v2"
@@ -73,6 +74,7 @@ func acceptOrQueryMatcherFactory(acceptHeader string) (func(*http.Request, *mux.
 
 func Server() *negroni.Negroni {
 	n := negroni.New()
+	n.Use(pprof.Pprof())
 	n.UseHandlerFunc(ContentTypeMiddleware)
 	n.UseHandlerFunc(ApiVersionMiddleware)
 	n.UseHandler(CreateRouter())
