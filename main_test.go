@@ -1,12 +1,13 @@
 package main
 
 import (
-	// "fmt"
+	"fmt"
 	"encoding/json"
 	"testing"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"github.com/gorilla/mux"
 )
 
 // Define API versions and their corresponding Accept headers.
@@ -138,3 +139,24 @@ func TestNotAcceptable(t *testing.T) {
 
 	}
 }
+
+func TestRoutes(t *testing.T) {
+	m := mux.NewRouter()
+	AddRoutes(m)
+
+	headers := map[string][]string{
+		"Accept": {versions["v2.0"]},
+	}
+
+	url1 := url.URL{Host: "localhost", Path: "/json2.json"}
+	request := http.Request{
+		URL: &url1,
+		Header: headers,
+	}
+	var match mux.RouteMatch
+	m.Match(&request, &match)
+	route := match.Route
+	fmt.Println(route.GetName())
+	// h := route.GetHandler()
+}
+
