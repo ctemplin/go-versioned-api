@@ -19,8 +19,17 @@ var acceptVersionMap = map[string]api.API {
 	"application/vnd.example.v3+json": new(handlersv3.APIv3),
 }
 
+var AcceptVersionMap = func() map[string]api.API {
+	return acceptVersionMap
+}
+
 func CreateRouter() *mux.Router {
 	router := mux.NewRouter()
+	router = AddRoutes(router)
+  return router
+}
+
+func AddRoutes(router *mux.Router) *mux.Router{
 	router.Path("/")
 
 	for acceptHeader, vApi := range acceptVersionMap {
@@ -36,7 +45,8 @@ func CreateRouter() *mux.Router {
 		}
 		// Create a route in the subrouter for each path/handler.
 		for path, handler := range pathHandlerMap {
-			subrouter.HandleFunc(path, handler)
+			route := subrouter.HandleFunc(path, handler)
+			route.Name(fmt.Sprintf("%s - %s", path, handler))
 		}
 	}
 	return router
