@@ -9,7 +9,8 @@ import (
 	"dev/handlers/v1"
 	"dev/handlers/v2"
 	"dev/handlers/v3"
-	// "fmt"
+	"fmt"
+	"os"
 )
 
 var acceptVersionMap = map[string]api.API {
@@ -83,5 +84,9 @@ func Server() *negroni.Negroni {
 
 func main() {
 	n := Server()
-	n.Run(":9000")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "9000"
+	}
+	n.Run(fmt.Sprintf(":%s", port))
 }
